@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Punição</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+
+        header h1 {
+            color: #27ae60;
+        }
+
+        h2 {
+            text-align: center;
+            color: #27ae60;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ecf0f1;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #2c3e50;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #2ecc71;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .alert {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        textarea {
+            resize: none;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-section">
+        <header>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxT48CgEK4aPm0bsUAbFSolocIx5DpZIxBMQ&s" alt="Logo Exército Brasileiro">
+            <h1>Sistema de Punição</h1>
+        </header>
+        <p>Por favor, insira a senha para acessar o sistema:</p>
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="text" id="password" placeholder="Digite a senha...">
+        </div>
+        <button onclick="checkPassword()">Entrar</button>
+        <div class="alert" id="error-message">Senha incorreta. Tente novamente!</div>
+    </div>
+
+    <div class="container hidden" id="system-section">
+        <header>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Ins%C3%ADgnia_do_Ex%C3%A9rcito_Brasileiro.svg/1200px-Ins%C3%ADgnia_do_Ex%C3%A9rcito_Brasileiro.svg.png" alt="Logo Exército Brasileiro">
+            <h1>Sistema de Punição</h1>
+        </header>
+        <h2>Selecione a Punição</h2>
+        <form id="punishment-form">
+            <div class="form-group">
+                <label for="punicao">Escolha o tipo de punição:</label>
+                <select id="punicao" onchange="updateFields()">
+                    <option value="">Selecione...</option>
+                    <option value="advertencia">Advertência</option>
+                    <option value="rebaixamento">Rebaixamento</option>
+                    <option value="exilio">Exílio</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nomenclatura">Nomenclatura do infrator:</label>
+                <input type="text" id="nomenclatura" placeholder="Digite a nomenclatura...">
+            </div>
+
+            <div class="form-group hidden" id="advertencia-fields">
+                <label for="tipo-adv">Tipo de Advertência:</label>
+                <input type="text" id="tipo-adv" placeholder="Digite o tipo de advertência...">
+            </div>
+
+            <div class="form-group hidden" id="rebaixamento-fields">
+                <label for="patente-antiga">Patente Antiga:</label>
+                <input type="text" id="patente-antiga" placeholder="Digite a patente antiga...">
+                <label for="patente-nova">Patente Nova:</label>
+                <input type="text" id="patente-nova" placeholder="Digite a nova patente...">
+            </div>
+
+            <div class="form-group">
+                <label for="motivo">Motivo:</label>
+                <textarea id="motivo" placeholder="Descreva o motivo..."></textarea>
+            </div>
+
+            <button type="button" onclick="generateReport()">Gerar Relatório</button>
+        </form>
+
+        <h2>Relatório Gerado:</h2>
+        <textarea id="generated-report" readonly style="height: 150px;"></textarea>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById("password").value;
+            if (password === "purgatorio_eb") {
+                document.getElementById("login-section").classList.add("hidden");
+                document.getElementById("system-section").classList.remove("hidden");
+            } else {
+                document.getElementById("error-message").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("error-message").style.display = "none";
+                }, 3000);
+            }
+        }
+
+        function updateFields() {
+            const punishmentType = document.getElementById("punicao").value;
+            document.getElementById("advertencia-fields").classList.add("hidden");
+            document.getElementById("rebaixamento-fields").classList.add("hidden");
+
+            if (punishmentType === "advertencia") {
+                document.getElementById("advertencia-fields").classList.remove("hidden");
+            } else if (punishmentType === "rebaixamento") {
+                document.getElementById("rebaixamento-fields").classList.remove("hidden");
+            }
+        }
+
+        function generateReport() {
+            const punishmentType = document.getElementById("punicao").value;
+            const nomenclatura = document.getElementById("nomenclatura").value;
+            const motivo = document.getElementById("motivo").value;
+
+            let report = `Nomenclatura do infrator: ${nomenclatura}\nMotivo: ${motivo}\n`;
+
+            if (punishmentType === "advertencia") {
+                const tipoAdv = document.getElementById("tipo-adv").value;
+                report += `Tipo de Advertência: ${tipoAdv}\nComprovações: em anexo.`;
+            } else if (punishmentType === "rebaixamento") {
+                const patenteAntiga = document.getElementById("patente-antiga").value;
+                const patenteNova = document.getElementById("patente-nova").value;
+                report += `Patente Antiga: ${patenteAntiga}\nPatente Nova: ${patenteNova}\nProvas: em anexo.`;
+            } else if (punishmentType === "exilio") {
+                report += "Provas: em anexo.";
+            }
+
+            document.getElementById("generated-report").value = report;
+            alert("Relatório gerado com sucesso!");
+        }
+    </script>
+</body>
+</html>
